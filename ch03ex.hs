@@ -1,5 +1,5 @@
 -- Graham Hutton: Programming in Haskell
--- Chapter 2 exercises
+-- Chapter 3 exercises
 
 -- 1. What are the types of the following values:
 
