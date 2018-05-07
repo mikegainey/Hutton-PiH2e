@@ -64,3 +64,51 @@ b &&! c = if b == True
                then True
                else False
           else False
+
+-- 6. Do the same for the following alternative definition, and note the difference in the number of conditional
+-- expressions that are required.
+-- True && b = b
+-- False && _ = False
+
+a &&@ b = if a == True
+          then b
+          else False
+
+-- 7. Show how the meaning of the following curried function definition can be formalised in terms of lambda espressions:
+-- mult :: Int -> Int -> Int -> Int
+-- mult x y z = x*y*z
+
+mult = \x -> (\y -> (\z -> x*y*z))
+
+-- 8. The Luhn algorithm is used to check bank card numbers for simple errors such as mistyping a digit, and proceeds as
+-- follows:
+-- - consider each digit as a separate number;
+-- - moving left, double every other number from the second last;
+-- - subtract 9 from each number that is now greater than 9;
+-- - add all the resulting numbers together;
+-- - if the total is divisible by 10, the card number is valid.
+
+-- Define a function luhnDouble :: Int -> Int that doubles a digit and subtracts 9 if the result is greater than 9
+
+luhnDouble d | dd > 9 = dd - 9
+             | otherwise = dd
+  where dd = d*2
+
+-- Using luhnDouble and the integer remainder function mod, define a function luhn :: Int -> Int -> Int -> Int -> Bool
+-- that decides if a fout-digit bank card number is valid. For example:
+-- > luhn 1 7 8 4
+-- True
+-- > luhn 4 7 8 3
+-- False
+
+luhn a b c d = let luhnSum = (luhnDouble a) + b + (luhnDouble c) + d
+               in  (luhnSum `mod` 10) == 0
+
+-- This will be an exercise in chapter 7:
+-- luhnGeneral :: [Int] -> Bool
+luhnGeneral numlst = luhnCheck
+  where revNumLst     = reverse numlst
+        zipNumLst     = zip revNumLst [1..]
+        doubledNumLst = map (\(d,p) -> if p `mod` 2 == 0 then luhnDouble d else d) zipNumLst
+        sumNumLst     = sum doubledNumLst
+        luhnCheck     = (sumNumLst `mod` 10) == 0
