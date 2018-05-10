@@ -1,4 +1,6 @@
+-- Graham Hutton: Programming in Haskell
 -- Caesar Cipher from chapter 5, page 53
+
 import Data.Char -- for ord and chr
 
 positions :: Eq a => a -> [a] -> [Int]

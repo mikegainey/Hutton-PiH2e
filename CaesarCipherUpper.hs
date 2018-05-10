@@ -1,3 +1,4 @@
+-- Graham Hutton: Programming in Haskell
 -- chapter 5, exercise 10: modify Caesar Cipher to handle upper-case characters
 -- and this is a reimplementation from memory (and it works!)
 import Data.Char -- for ord and chr
