@@ -4,7 +4,7 @@
 {- 1. How does the recursive version of the factorial function behave if appied to a negative argument, such as (-1)?
  Modify the definition to prohibit negative arguments by adding a guard to the recursive case.
 
-Ans: It is an infinite loop.
+Ans: An infinite loop results.
 
 -}
 
@@ -14,14 +14,13 @@ fac n = n * fac (n-1)
 fac' 0 = 1
 fac' n
   | n > 0 = n * fac' (n-1)
-  | otherwise = 0
+  | otherwise = 1
 
 {- 2. Define a recursive function sumdown :: Int -> Int that returns the sum of the non-negative integers from a given
  value down to zero. For example, sumdown 3 should return the result 3+2+1+0 = 6.  -}
 
 sumdown 0 = 0
 sumdown n = n + sumdown (n-1)
-
 
 {- 3. Define the exponentiation operator ^ for non-negative integers using the same pattern of recursion as the
  multiplication operator *, and show how the expression 2 ^ 3 is evaluated using your definition. -}
@@ -46,7 +45,6 @@ euclid a b
 euclid' x y | x == y = x
            | x < y = euclid' x (y-x)
            | y < x = euclid' (x-y) y
-
 
 {- 5. Using the recursive definitions given in this chapter, show how length [1,2,3], drop 3 [1,2,3,4,5], and init [1,2,3]
  are evaluated.
