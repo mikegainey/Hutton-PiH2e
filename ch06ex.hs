@@ -4,9 +4,7 @@
 {- 1. How does the recursive version of the factorial function behave if appied to a negative argument, such as (-1)?
  Modify the definition to prohibit negative arguments by adding a guard to the recursive case.
 
-Ans: An infinite loop results.
-
--}
+Ans: An infinite loop results.  -}
 
 fac 0 = 1
 fac n = n * fac (n-1)
@@ -14,7 +12,7 @@ fac n = n * fac (n-1)
 fac' 0 = 1
 fac' n
   | n > 0 = n * fac' (n-1)
-  | otherwise = 1
+  | otherwise = negate (fac' (negate n))
 
 {- 2. Define a recursive function sumdown :: Int -> Int that returns the sum of the non-negative integers from a given
  value down to zero. For example, sumdown 3 should return the result 3+2+1+0 = 6.  -}
