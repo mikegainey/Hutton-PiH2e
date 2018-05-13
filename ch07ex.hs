@@ -48,3 +48,41 @@ filter' p = foldr (\e acc -> if p e then e : acc else acc) []
 dec2int :: [Int] -> Int
 dec2int = foldl (\acc d -> d + acc*10) 0
 
+{- 5. Without looking at the definitions from the standard prelude, define the higher-order library function curry that
+ converts a function on pairs into a curried function, and, conversely, the function uncurry that converts a curried
+ function with two arguments into a function on pairs. Hint: first write down the types of the two functions.  -}
+
+-- my version
+curry' :: ((a,b) -> c) -> a -> b -> c
+curry' f = \a b -> f (a,b)
+
+-- in the Prelude
+curry'' :: ((a,b) -> c) -> a -> b -> c
+curry'' f x y = f (x,y)
+
+-- my version
+uncurry' :: (a -> b -> c) -> ((a,b) -> c)
+uncurry' f = \(a,b) -> f a b
+
+-- in the Prelude
+uncurry'' :: (a -> b -> c) -> ((a,b) -> c)
+uncurry'' f p = f (fst p) (snd p)
+
+{- 9. Define a function altMap :: (a -> b) -> (a -> b) -> [a] -> [b] that alternately applies its two argument functions
+ to successive elements in a list, in turn about order. For example:
+> altMap (+10) (+100) [0,1,2,3,4]
+[10,101,12,103,14]  -}
+
+altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap f1 f2 [] = []
+altMap f1 f2 [z] = f1 z : []
+altMap f1 f2 (x:y:zs) = f1 x : f2 y : altMap f1 f2 zs
+
+{- 10. Using altMap, define a function luhn :: [Int] -> Bool that implements the Luhn algorithm from the exercises in
+ chapter 4 for bank card numbers of any length. Test your new function using your own bank card.  -}
+
+-- luhn :: [Int] -> Bool
+luhn = div10 . sum . sub9 . doubled
+  where doubled = reverse . altMap id (*2) . reverse
+        sub9 = map (\x -> if x > 9 then x-9 else x)
+        div10 x = x `mod` 10 == 0
