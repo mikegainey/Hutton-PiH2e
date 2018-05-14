@@ -37,7 +37,7 @@ dropWhile' p (x:xs)
 
 -- 3. Redefine the functions map f and filter p using foldr.
 
-map' f = foldr (\e acc -> f e : acc) []
+map' f = foldr (\x acc -> f x : acc) []
 
 filter' p = foldr (\e acc -> if p e then e : acc else acc) []
 
@@ -67,6 +67,36 @@ uncurry' f = \(a,b) -> f a b
 -- in the Prelude
 uncurry'' :: (a -> b -> c) -> ((a,b) -> c)
 uncurry'' f p = f (fst p) (snd p)
+
+{- 6. A higher-order function unfold that encapsulates a simple pattern of recursion for producing a list can be defined as follows:
+
+unfold p h t x
+  | p x = []
+  | otherwise = h x : unfold p h t (t x)
+
+That is, the function unfold p h t produces the empty list if the predicate p is true of the argument value, and
+otherwise produces a non-empty list by applying the function h to this value to give the head, and the function t to
+produce the tail of the list. For example, the funciton int2bin can be rewritten more compactly using unfold as follows:
+
+int2bin = unfold (== 0) (`mod` 2) (`div` 2)
+
+Redefine the functions chop8, map f and iterate f using unfold.  -}
+
+unfold p h t x
+  | p x = []
+  | otherwise = h x : unfold p h t (t x)
+
+-- 6a. chop8; chops a list up into 8-element sub lists; the list has a length that is a multiple of 8
+chop8 :: [a] -> [[a]]
+chop8 = unfold null (take 8) (drop 8)
+
+-- 6b. map f
+map'' f = unfold null (f . head) tail
+
+-- 6c. iterate f
+iterate' f = unfold (\x -> False) id f
+
+ -- 7 & 8. See BinaryStringParity.hs
 
 {- 9. Define a function altMap :: (a -> b) -> (a -> b) -> [a] -> [b] that alternately applies its two argument functions
  to successive elements in a list, in turn about order. For example:
