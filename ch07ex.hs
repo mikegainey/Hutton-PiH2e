@@ -96,7 +96,7 @@ map'' f = unfold null (f . head) tail
 -- 6c. iterate f
 iterate' f = unfold (\x -> False) id f
 
- -- 7 & 8. See BinaryStringParity.hs
+-- 7 & 8. See BinaryStringParity.hs
 
 {- 9. Define a function altMap :: (a -> b) -> (a -> b) -> [a] -> [b] that alternately applies its two argument functions
  to successive elements in a list, in turn about order. For example:
