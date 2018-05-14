@@ -1,6 +1,8 @@
 -- Graham Hutton: Programming in Haskell
 -- Chapter 7 extended example: voting algorithm: first past the post
 
+{- In this system, each person has one vote, and the candidate with the largest number of votes is declared the winner. -}
+
 import Data.List
 
 votes :: [String]
