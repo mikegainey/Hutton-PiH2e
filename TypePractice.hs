@@ -25,3 +25,36 @@ bq = [("Mike", "trumpet"), ("James", "trumpet"), ("Andy", "French horn"), ("Dani
 find :: Eq k => k -> Assoc k v -> [v]
 find k t = [ v | (k',v) <- t, k' == k]
 
+data Move = North | South | East | West
+  deriving (Show)
+
+move :: Move -> Pos -> Pos
+move North (x,y) = (x,y+1)
+move South (x,y) = (x,y-1)
+move East (x,y) = (x+1,y)
+move West (x,y) = (x-1,y)
+
+moves :: [Move] -> Pos -> Pos
+moves [] p = p
+moves (m:ms) p = move m (moves ms p)
+
+rev :: Move -> Move
+rev North = South
+rev South = North
+rev East = West
+rev West = East
+
+data Shape = Circle Float | Rectangle Float Float
+  deriving (Show)
+
+-- create a square
+square :: Float -> Shape
+square s = Rectangle s s
+
+-- calculate area of circles and squares
+area :: Shape -> Float
+area (Circle r) = pi*r^2
+area (Rectangle x y) = x*y
+
+
+
