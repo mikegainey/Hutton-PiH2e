@@ -1,10 +1,5 @@
 -- playing with data type declarations
 
-type Nat = Int
-
-natFac :: Nat -> Nat
-natFac n = product[1..n]
-
 type Pos = (Int, Int)
 type Trans = Pos -> Pos
 type Distance = Float
@@ -19,7 +14,7 @@ type Pair a = (a,a)
 
 type Assoc k v = [(k,v)]
 
-bq :: Assoc String String
+bq :: Assoc String String -- I would rather see [(String, String)]
 bq = [("Mike", "trumpet"), ("James", "trumpet"), ("Andy", "French horn"), ("Daniel", "trombone"), ("Ben", "tuba")]
 
 find :: Eq k => k -> Assoc k v -> [v]
@@ -56,5 +51,26 @@ area :: Shape -> Float
 area (Circle r) = pi*r^2
 area (Rectangle x y) = x*y
 
+data Nat = Zero | Succ Nat
+  deriving (Show)
+
+nat2int :: Nat -> Int
+nat2int Zero = 0
+nat2int (Succ n) = 1 + nat2int n
+
+int2nat :: Int -> Nat
+int2nat 0 = Zero
+int2nat n = Succ (int2nat (n-1))
+
+add :: Nat -> Nat -> Nat
+add Zero n = n
+add (Succ m) n = Succ (add m n)
+
+inc :: Nat -> Nat
+inc n = Succ n
+
+dec :: Nat -> Nat
+dec Zero = Zero
+dec (Succ n) = n
 
 
