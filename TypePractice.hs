@@ -73,4 +73,39 @@ dec :: Nat -> Nat
 dec Zero = Zero
 dec (Succ n) = n
 
+data List a = Nil | Cons a (List a)
+  deriving (Show)
+
+len :: List a -> Int
+len Nil = 0
+len (Cons a as) = 1 + len as
+
+makeList :: [a] -> List a
+makeList [] = Nil
+makeList (x:xs) = Cons x (makeList xs)
+
+data Tree a = Leaf a | Node (Tree a) a (Tree a)
+  deriving (Show)
+
+t :: Tree Int
+t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Leaf 9))
+
+-- this version is not smart enough to only search down the correct branch
+occurs' :: Eq a => a -> Tree a -> Bool
+occurs' x (Leaf y) = x == y
+occurs' x (Node left y right) = x == y || occurs' x left || occurs' x right
+
+flatten :: Tree a -> [a]
+flatten (Leaf x) = [x]
+flatten (Node left x right) = (flatten left) ++ [x] ++ (flatten right)
+
+occurs :: Ord a => a -> Tree a -> Bool
+occurs x (Leaf y) = (x == y)
+occurs x (Node left y right)
+  | x == y = True
+  | x < y = occurs x left
+  | x > y = occurs x right
+  | otherwise = error "This should never happen"
+
+
 
