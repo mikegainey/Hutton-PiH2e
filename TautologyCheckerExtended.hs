@@ -1,6 +1,6 @@
 -- Graham Hutton: Programming in Haskell
 -- Tautology Checker, extended example from chapter 8, page 101
--- end-if-chapter exercise #8, extend to include logical disjunction (Or) and equivalence (Equiv)
+-- end-of-chapter exercise #8, extend to include logical disjunction (Or) and equivalence (Equiv)
 
 -- used to associate variables ('A'..'Z') with Bool values
 type Assoc a b = [(a,b)]
