@@ -12,18 +12,18 @@ int2nat 0 = Zero
 int2nat n = Succ (int2nat (n-1))
 
 nat2int :: Nat -> Int
-nat2int Zero = 0
+nat2int Zero     = 0
 nat2int (Succ n) = 1 + nat2int n
 
 add :: Nat -> Nat -> Nat
-add Zero x = x
+add Zero x     = x
 add (Succ x) y = Succ (add x y)
 
 mult :: Nat -> Nat -> Nat
-mult x Zero = Zero
+mult x Zero     = Zero
 mult x (Succ y) = add x (mult x y)
 
-{- 2. Although not included n appendixB, the standard prelude defines
+{- 2. Although not included n appendix B, the standard prelude defines
 
      data Ordering - LT | EQ | GT
 
@@ -67,11 +67,7 @@ at most one, with leaves themselves being trivially balanced. Define a function 
 if a binary tree is balanced or not. Hint: first define a function that returns the number of leaves in a tree. -}
 
 data Tree a = Leaf a | Node (Tree a) (Tree a)
-
--- balancedTree :: Tree
--- balancedTree ==
--- unbalancedTree :: Tree
--- unbalancedTree
+  deriving (Show)
 
 numLeaves :: Tree a -> Int
 numLeaves (Leaf _) = 1
@@ -79,9 +75,50 @@ numLeaves (Node left right) = numLeaves left + numLeaves right
 
 balanced :: Tree a -> Bool
 balanced (Leaf _) = True
-balanced (Node left right) = ((abs (numLeaves left - numLeaves right)) < 2) && balanced left && balanced right
+balanced (Node left right) = ((abs (numLeaves left - numLeaves right)) <= 1) && balanced left && balanced right
 
 {- 4. Define a function balance :: [a] -> Tree a that converts a non-empty list into a balanced tree. Hint: first define a
- function that splits a list into two halves wholse length differs by at most one. -}
+ function that splits a list into two halves whose length differs by at most one. -}
 
+splitList xs = (take half xs, drop half xs)
+  where half = (length xs) `div` 2
 
+balance :: [a] -> Tree a
+balance (x:[]) = Leaf x
+balance xs = Node (balance left) (balance right)
+  where left  = (fst . splitList) xs
+        right = (snd . splitList) xs
+
+{- 5. Given the type declaration
+
+     data Expr = Val Int | Add Expr Expr
+
+define a higher-order function
+
+     folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+
+such that folde f g replaces each Val constructor in an expression by the function f, and each Add constructor by the
+function g. -}
+
+data Expr = Val Int | Add Expr Expr
+
+folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+folde f g (Val x)   = f x
+folde f g (Add x y) = g (folde f g x) (folde f g y)
+
+{- 6. Using folde, define a function eval :: Expr -> Int that evaluates an expression to an integer value, and a function
+ size :: Expr -> that calculates the number of values in an expression. -}
+
+eval :: Expr -> Int
+eval exp = folde id (+) exp
+
+size :: Expr -> Int
+size exp = folde (\x -> 1) (+) exp
+
+-- 7. Complete the following instance declarations:
+
+-- instance Eq a => Eq (Maybe a) where
+
+-- instance Eq a => Eq [a] where
+
+-- 8 & 9: see TautologyExtended.hs and AbstractMachineExtended.hs
