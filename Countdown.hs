@@ -1,5 +1,7 @@
 -- Graham Hutton: Programming in Haskell
 -- The countdown problem, extended example from chapter 9, page 111
+-- to compile: $ ghc -O2 Countdown.hs
+-- to run: $ ./Countdown
 
 main :: IO ()
 main = print (solutions' [1,3,7,10,25,50] 765)
@@ -20,6 +22,7 @@ oldValid Div x y = x `mod` y == 0
 
 -- because 1 + 2 and 2 + 1 are equivalent, use only 1 + 2 (x <= y)
 -- because 5 / 1 and 5 are equivalent, don't allow y to be 1
+valid :: Op -> Int -> Int -> Bool
 valid Add x y = x <= y
 valid Sub x y = x > y
 valid Mul x y = x /= 1 && y /= 1 && x <= y
@@ -112,5 +115,4 @@ solutions' :: [Int] -> Int -> [Expr]
 solutions' ns n =
   [e | ns' <- choices ns, (e,m) <- results ns', m == n]
 
--- exploiting algebraic properties
-
+-- exploiting algebraic properties: improved the valid function
