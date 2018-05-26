@@ -1,5 +1,5 @@
-test.hs
-temp.hs
+test*.hs
+temp*.hs
 
 # Created by https://www.gitignore.io/api/emacs,haskell
 
