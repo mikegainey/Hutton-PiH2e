@@ -78,14 +78,15 @@ getCh = do hSetEcho stdin False
            hSetEcho stdin True
            return x
 
--- not working yet!
+-- Backspace deletes the character from the screen but not from the returned value!
 getLine' = do x <- getCh
-              case x of
-                '\n'   -> do putChar x
-                             return []
-                '\DEL' -> do putChar '\b'
+              if x == '\n'
+                then do putChar x
+                        return []
+                else if x == '\DEL'
+                     then do putChar '\b'
                              xs <- getLine'
-                             return (x:xs)
-                _      -> do putChar x
+                             return xs
+                     else do putChar x
                              xs <- getLine'
                              return (x:xs)
