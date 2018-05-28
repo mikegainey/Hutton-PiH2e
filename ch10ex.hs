@@ -1,6 +1,8 @@
 -- Graham Hutton: Programming in Haskell
 -- Chapter 10 exercises
 
+import System.IO
+
 {- 1. Redifine putStr :: String -> IO () using a list comprehension and the library function sequence_ :: [IO a] -> IO ().
 -}
 
@@ -13,20 +15,24 @@ putStr' xs = sequence_ [ putChar x | x <- xs]
 
 type Board = [Int]
 
+putRow :: Show a => a -> Int -> IO ()
 putRow row num = do putStr (show row)
                     putStr ": "
                     putStrLn (concat (replicate num "* "))
 
 -- I couldn't do this on my own! Had to look it up!
+putBoardR' :: (Num t, Show t) => [Int] -> t -> IO ()
 putBoardR' [] r = return ()
 putBoardR' (x:xs) r = do putRow r x
                          putBoardR' xs (r+1)
 
+putBoardR :: [Int] -> IO ()
 putBoardR b = putBoardR' b 1
 
 {- 3. In a similar manner to the first exercise, redefine the generalized version of putBoard using a list comprehension
  and sequence_. -}
 
+putBoardS :: [Int] -> IO ()
 putBoardS b = sequence_ [putRow row num | (row,num) <- zip [1..] b ]
 
 {- 4. Define an action adder :: IO () that reads a given number of integers from the keyboard, one per line, and displays
@@ -43,19 +49,43 @@ How many numbers? 5
 The total is 25
 -}
 
-adder = do putStr "How many numbers? "
-           ns <- getLine
-           let n = read ns :: Int
-           return n
+-- Got it!  All by myself!
+adderR' :: (Num t, Eq t) => Int -> t -> IO Int
+adderR' total 0 = return total
+adderR' total remain = do xstr <- getLine
+                          let x = read xstr :: Int
+                          adderR' (total + x) (remain - 1)
 
-{- 5. Redefine adder using the function sequence :: [IO a] -> IO [a] that performs a list of actions and returns a list of the resulting values. -}
+adderR :: (Eq t, Num t) => t -> IO Int
+adderR n = adderR' 0 n
 
--- adders = do putStr "How many numbers? "
---             ns <- getLine
---             let n = read ns :: Int
---             xs <- sequence_ [getLine | _ <- [1..n]]
---             putStrLn xs
+{- 5. Redefine adder using the function sequence :: [IO a] -> IO [a] that performs a list of actions and returns a list of
+ the resulting values. -}
+
+-- I think he was expecting something else, since fmap hasn't been introduced yet.
+adderS :: (Enum t, Num t) => t -> IO Int
+adderS n = fmap sum $ sequence [ getL | _ <- [1..n]]
+  where getL = do xstr <- getLine
+                  return (read xstr :: Int)
 
 {- 6. Using getCh, define an action readLine :: IO String that behaves in the same way as getLine, except that it also
  permits the delete key to be used to remove characters. Hint: the delete character is '\DEL', and the control character
  for moving the cursor back one space is '\b'. -}
+
+getCh :: IO Char
+getCh = do hSetEcho stdin False
+           x <- getChar
+           hSetEcho stdin True
+           return x
+
+-- not working yet!
+getLine' = do x <- getCh
+              case x of
+                '\n'   -> do putChar x
+                             return []
+                '\DEL' -> do putChar '\b'
+                             xs <- getLine'
+                             return (x:xs)
+                _      -> do putChar x
+                             xs <- getLine'
+                             return (x:xs)
