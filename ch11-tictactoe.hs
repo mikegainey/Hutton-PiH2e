@@ -29,3 +29,38 @@ turn g = if os <= xs then O else X
         os = length (filter (==O) ps)
         xs = length (filter (==X) ps)
 
+wins :: Player -> Grid -> Bool
+wins p g = any line (rows ++ cols ++ diags)
+  where line = all (==p)
+        rows = g
+        cols = transpose g
+        diags = [diag g, diag (map reverse g)]
+
+diag :: Grid -> [Player]
+diag g = [g !! n !! n | n <- [0..(size-1)]]
+
+won :: Grid -> Bool
+won g = wins O g || wins X g
+
+g1 = [[X,O,X], [O,X,O], [O,O,X]]
+
+putGrid :: Grid -> IO ()
+putGrid = putStrLn . unlines . concat . interleave bar . map showRow
+  where bar = [replicate ((size*4)-1) '-']
+
+showRow :: [Player] -> [String]
+showRow = beside . interleave bar . map showPlayer
+  where beside = foldr1 (zipWith (++))
+        bar = replicate 3 "|"
+
+showPlayer :: Player -> [String]
+showPlayer O = ["   ", " O ", "   "]
+showPlayer B = ["   ", "   ", "   "]
+showPlayer X = ["   ", " X ", "   "]
+
+interleave :: a -> [a] -> [a]
+interleave x [] = []
+interleave x [y] = [y]
+interleave x (y:ys) = y : x : interleave x ys
+
+
