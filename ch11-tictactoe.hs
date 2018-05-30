@@ -72,5 +72,18 @@ interleave x [] = []
 interleave x [y] = [y]
 interleave x (y:ys) = y : x : interleave x ys
 
+valid :: Grid -> Int -> Bool
+valid g i = 0 <= i && i < size^2 && concat g !! i == B
 
+move :: Grid -> Int -> Player -> [Grid]
+move g i p = if valid g i then [chop size (xs ++ [p] ++ ys)] else []
+  where (xs,B:ys) = splitAt i (concat g)
 
+chop :: Int -> [a] -> [[a]]
+chop n [] = []
+chop n xs = take n xs : chop n (drop n xs)
+
+getNat :: String -> IO Int
+getNat prompt = do putStr prompt
+                   xs <- getLine
+                   if xs /= []
