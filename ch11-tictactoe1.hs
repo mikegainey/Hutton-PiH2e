@@ -1,5 +1,5 @@
 -- Graham Hutton: Programming in Haskell
--- tic-tac-toe, extended example from chapter 11
+-- tic-tac-toe (simple 2-player version), extended example from chapter 11
 
 import Data.Char
 import Data.List
@@ -52,16 +52,19 @@ myPutGrid :: Grid -> IO ()
 myPutGrid g = putStrLn $ unlines $ concat $ intersperse [line] $ map myShowRow g
   where  line = replicate (size*3 + (size-1)) '-'
 
+-- I don't understand beside; myShowRow is much easier for me to understand
 showRow :: [Player] -> [String]
 showRow = beside . interleave bar . map showPlayer
   where beside = foldr1 (zipWith (++))
         bar = replicate 3 "|"
 
+-- B should be "   ", not " B "
 myShowRow :: [Player] -> [String]
-myShowRow r = [blank,row,blank]
-  where row = concat $ intersperse "|" $ map (\x -> " " ++ show x ++ " ") r
-        blank = concat $ intersperse "|" $ replicate size "   "
- 
+myShowRow players = [above,row,below]
+  where row = concat $ intersperse "|" $ map (\x -> " " ++ show x ++ " ") players
+        above = concat $ intersperse "|" $ replicate size "   "
+        below = above
+
 showPlayer :: Player -> [String]
 showPlayer O = ["   ", " O ", "   "]
 showPlayer B = ["   ", "   ", "   "]
