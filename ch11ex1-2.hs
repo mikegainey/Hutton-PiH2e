@@ -24,7 +24,22 @@ treeDepth (Node _ ts) = 1 + maximum (map treeDepth ts)
 
 {- 2. Our tic-tac-toe program always chooses the first move from the list of best moves. Modify the final program to
  choose a random move from the list of best moves, using the function randomRIO :: (Int,Int) -> IO Int from
- System.Random to generate a random integer in the given range. -}
+ System.Random to generate a random integer in the given range.
+
+from play':
+...
+  | p == X    = do putStr "Player X is thinking... "
+                   let bms = bestmoves g p
+                   r <- randomRIO (0, ((length bms)-1))
+                   (play $! bms !! r) (next p)
+
+new function bestmoves (removed head from bestmove):
+
+bestmoves :: Grid -> Player -> [Grid]
+bestmoves g p =[g' | Node (g', p') _ <- ts, p' == best]
+  where tree = prune depth (gametree g p)
+        Node (_,best) ts = minimax tree
+-}
 
 
 
@@ -142,7 +157,9 @@ play' g p
                                 play' g p
                      [g'] -> play g' (next p)
   | p == X    = do putStr "Player X is thinking... "
-                   (play $! (bestmove g p)) (next p)
+                   let bms = bestmoves g p
+                   r <- randomRIO (0, ((length bms)-1))
+                   (play $! bms !! r) (next p)
 
 prompt :: Player -> String
 prompt p = "Player " ++ show p ++ ", enter your move: "
@@ -169,8 +186,8 @@ depth = 9
 
 minimax :: Tree Grid -> Tree (Grid, Player)
 minimax (Node g [])
-  | wins O g = Node (g, O) []
-  | wins X g = Node (g, X) []
+  | wins O g  = Node (g, O) []
+  | wins X g  = Node (g, X) []
   | otherwise = Node (g, B) []
 minimax (Node g ts)
   | turn g == O = Node (g, minimum ps) ts'
@@ -180,6 +197,11 @@ minimax (Node g ts)
 
 bestmove :: Grid -> Player -> Grid
 bestmove g p = head [g' | Node (g', p') _ <- ts, p' == best]
+  where tree = prune depth (gametree g p)
+        Node (_,best) ts = minimax tree
+
+bestmoves :: Grid -> Player -> [Grid]
+bestmoves g p =[g' | Node (g', p') _ <- ts, p' == best]
   where tree = prune depth (gametree g p)
         Node (_,best) ts = minimax tree
 
