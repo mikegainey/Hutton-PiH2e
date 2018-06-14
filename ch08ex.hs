@@ -115,7 +115,7 @@ eval exp = folde id (+) exp
 size :: Expr -> Int
 size exp = folde (\x -> 1) (+) exp
 
--- 7. Complete the following instance declarations:
+-- 7. TODO: Complete the following instance declarations:
 
 -- instance Eq a => Eq (Maybe a) where
 

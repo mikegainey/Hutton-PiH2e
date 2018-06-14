@@ -6,9 +6,9 @@
 
 6a. allow the use of exponentiation in expressions; (done)
 
-6b. produce the nearest solutions if no exact solution is possible; (done -- use solutions'')
+6b. TODO: produce the nearest solutions if no exact solution is possible; (done -- use solutions'')
 
-6c. order the solutions using a suitable measure of simplicity; (done -- use solutions''')  -}
+6c. TODO: order the solutions using a suitable measure of simplicity; (done -- use solutions''')  -}
 
 main :: IO ()
 main = print (solutions' [1,3,7,10,25,50] 765)

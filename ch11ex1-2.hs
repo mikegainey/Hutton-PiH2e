@@ -1,5 +1,5 @@
 -- Graham Hutton: Programming in Haskell
--- Chapter 10 exercises (mostly modifiying tic-tac-toe)
+-- Chapter 11 exercises (mostly modifiying tic-tac-toe)
 
 import Data.Char
 import Data.List

@@ -76,9 +76,9 @@ valid Div x y = y /=  0 && x `mod` y == 0
 
 6a. allow the use of exponentiation in expressions;
 
-6b. produce the nearest solutions if no exact solution is possible;
+6b. TODO: produce the nearest solutions if no exact solution is possible;
 
-6c. order the solutions using a suitable measure of simplicity;
+6c. TODO: order the solutions using a suitable measure of simplicity;
 
 Ans: see Countdown2.hs
 
