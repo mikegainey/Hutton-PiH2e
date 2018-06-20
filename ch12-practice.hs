@@ -1,3 +1,4 @@
+  -- fmap g st = S (\s -> let (x,s') = app st s in (g x, s'))
 -- functor, applicative, monad practice
 
 data Sein a = Ja a | Nichts
@@ -33,9 +34,16 @@ type State = Int
 
 newtype ST a = S (State -> (a,State))
 
-st :: ST String
-st s = (sign,s)
-  where sign = case (compare s 0) of
-                 LT -> "negative"
-                 EQ -> "zero"
-                 GT -> "positive"
+app :: ST a -> State -> (a, State)
+app (S st) x = st x
+
+instance Functor ST where
+  -- fmap :: Functor f => (a -> b) -> f a -> f b
+  fmap g st = S (\s -> let (x,s') = app st s in (g x,s'))
+
+instance Applicative ST where
+  -- pure :: Applicative f => a -> f a
+  pure x = S (\s -> (x,s))
+  -- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+
+
