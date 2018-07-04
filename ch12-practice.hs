@@ -45,5 +45,11 @@ instance Applicative ST where
   -- pure :: Applicative f => a -> f a
   pure x = S (\s -> (x,s))
   -- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+  stf <*> stx = S (\s ->
+                      let (f,s')  = app stf s
+                          (x,s'') = app stx s'
+                      in  (f x, s''))
 
-
+instance Monad ST where
+  -- (>>=) :: Monad m => m a -> (a -> m b) -> m b
+  st >>= f = S (\s -> let (x,s') = app st s in app (f x) s')
