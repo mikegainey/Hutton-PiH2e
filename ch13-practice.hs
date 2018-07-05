@@ -58,3 +58,24 @@ sat p = do x <- item
 
 digit :: Parser Char
 digit = sat isDigit
+
+lower :: Parser Char
+lower = sat isLower
+
+upper :: Parser Char
+upper = sat isUpper
+
+letter :: Parser Char
+letter = sat isAlpha
+
+alphanum :: Parser Char
+alphanum = sat isAlphaNum
+
+char :: Char -> Parser Char
+char x = sat (== x)
+
+string :: String -> Parser String
+string [] = []
+string (x:xs) = do char x
+                   string xs
+                   return (x:xs)
